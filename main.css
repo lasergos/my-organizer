@@ -1,0 +1,300 @@
+
+h1{
+	font-size: 100px;
+    font-weight: 100;
+    text-align: center;
+    color: rgba(175, 47, 47, 0.15);
+    margin-bottom: 30px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+h5{
+	color: rgba(175, 47, 47, 0.3);
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+#form *{
+	/*display: inline-block;*/
+}
+
+.textarea{
+	width: 100%;
+	border-radius: 10px;
+	border-color:  #FFC0CB;
+	resize: none;
+	padding: 10px;
+}
+
+.textarea:focus{
+	border-radius: 10px; /* не работает*/
+	outline: none;
+	box-shadow: 0 0 0 1px red;
+	/*outline: 1px solid red;*/
+	/*outline-radius: 10px;*/
+	/*color: red;*/
+}
+
+.textareaReadOnly{
+	width: 100%;
+	border-color: transparent;
+	resize: none;
+}
+
+.textareaReadOnly:focus{
+	outline: none;
+	-moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+li.completed textarea {
+    color: #d9d9d9;
+    text-decoration: line-through;
+}
+
+.textareaReadOnly.highPriority{
+	border-radius: 10px;
+	background-color: rgba(204, 00, 66, 0.1);
+}
+
+.textareaReadOnly.mediumPriority{
+	border-radius: 10px;
+	background-color: rgba(33, 255, 33, 0.1);
+}
+
+.textareaReadOnly.lowPriority{
+	border-radius: 10px;
+	background-color: rgba(255, 255, 33, 0.2);
+}
+
+#addReminder, #clear{
+	width: 100%;
+	margin: 14px 0;
+	background-color: transparent;
+	border: transparent;
+	color: rgba(175, 47, 47, 0.2);
+	outline: none;
+	-moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+#addReminder:hover, #clear:hover{
+	width: 100%;
+	margin: 14px 0;
+	background-color: transparent;
+	border: transparent;
+	color: rgba(175, 47, 47, 1);
+}
+
+#addReminder:active, #clear:active{
+	width: 100%;
+	margin: 14px 0;
+	background-color: transparent;
+	border: transparent;
+	color: rgba(00, 99, 255, 1);
+}
+
+.prioritySel{
+	position: relative;
+	margin-top: 10px;
+	border: 1px solid #FFC0CB;
+	border-radius: 5px;
+	min-height: 65px; /* как сделать динамической*/
+	background-color: rgba(255, 204, 255, 0.2);
+	-moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.prioritySel p{
+	text-align: center;
+	margin-top: 5px;
+}
+
+.prioritySel button{
+	border: 1px solid #FFC0CB;
+	border-radius: 5px;
+	background-color: rgba(33, 255, 33, 0.1);
+	outline: none;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+#highPriority{
+	background-color: rgba(204, 00, 66, 0.1);
+}
+
+#lowPriority{
+	background-color: rgba(255, 255, 33, 0.2);
+}
+
+.prioritySel button:active{
+	color: rgba(00, 99, 255, 1);
+}
+
+#main{
+	margin-top: 10px;
+}
+
+#toggle-all.fa-check-square-o{
+	position: absolute;
+    top: -165px;
+    left: 35px;
+    color: rgba(00, 80, 00, 1);
+}
+
+#toggle-all.fa-square-o{
+	position: absolute;
+    top: -165px;
+    left: 35px;
+    color: rgba(00, 80, 00, 0.1);
+}
+
+#todo-list{
+	list-style: none;
+	/*height: 35px;*/
+}
+
+.li{
+	border: 1px solid #FFC0CB;
+	border-radius: 5px;
+	padding: 10px 20px;
+	min-height: 40px;
+	/*background-color: rgba(80, 80, 00, 0.1);*/
+	/*height: 35px;  как сделать динамической*/
+	/*word-wrap: break-word;*/
+}
+
+.beginning{
+	/*height: inherit;*/
+	text-align: center;
+}
+
+i.fa-check-square-o{
+	/*vertical-align: -65%;*/
+	color: rgba(00, 80, 00, 1);
+}
+
+ i.fa-square-o{
+	/*vertical-align: -65%;*/
+	color: rgba(00, 80, 00, 0.1);
+} 
+
+#toggle{
+	top: 20%;
+    position: relative;
+}
+
+.middle{
+	height: inherit;
+	
+}
+
+.element{
+	vertical-align: middle;
+	position: relative;
+}
+
+.end{
+	height: inherit;
+}
+
+.glyphicon-remove{
+	color: rgba(175, 47, 47, 0.1);
+	top: 25%;
+}
+
+.glyphicon-remove:hover{
+	color: rgba(175, 47, 47, 1);
+}
+
+#hideCompleted{
+	/*margin-left:40px;*/
+}
+
+.footer{
+	position: relative;
+	border: 1px solid #FFC0CB;
+	border-radius: 5px;
+	min-height: 65px; /* как сделать динамической*/
+	background-color: rgba(255, 204, 255, 0.2);
+	/*margin-left:40px;*/
+	-moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.footer button{
+	/*position: absolute;*/
+	border: 1px solid #FFC0CB;
+	border-radius: 5px;
+	background: transparent;
+	outline: none;
+	/*margin: 7px auto;*/
+	margin-top: 10px;
+	/*top: 50%;*/
+	/*left: 50%;*/
+	/*transform: translate(-50%, -50%); */
+	/*vertical-align: middle;*/
+}
+
+
+.footer button:active{
+	color: rgba(00, 99, 255, 1);
+}
+menu {
+	padding: 0;
+}
+.context-menu {
+	display: none;
+	position: absolute;
+	z-index: 10;
+	border: 1px solid rgba(255, 00, 00, 0.7);
+	border-radius: 5px;
+	transform: translateX(-50%);
+	background-color: white;
+
+	/*background: transparent;*/
+}
+
+.context-menu ul{
+	list-style: none;
+	padding: 10px;
+
+}
+ 
+.context-menu.active {
+	display: block;
+}
+
+.context-menu li{
+	padding-top: 10px;
+}
+
+.context-menu span:hover {
+	color:rgba(175, 47, 47, 1);
+}
+
+.context-menu span:active {
+	color:rgba(00, 99, 255, 1);
+}
+
+#high i{
+	color: rgba(204, 00, 66, 0.5);
+}
+
+#medium i{
+	color: rgba(33, 255, 33, 0.5);
+}
+
+#low i{
+	color: rgba(255, 255, 33, 0.5);
+}
+
+.context-menu_value{
+	margin-left: 10px;
+}
+
+.time{
+	font-size: 10px;
+}
+
