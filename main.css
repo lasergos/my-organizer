@@ -280,14 +280,17 @@ menu {
 
 #high i{
 	color: rgba(204, 00, 66, 0.5);
+    margin-right: 5px;
 }
 
 #medium i{
 	color: rgba(33, 255, 33, 0.5);
+	margin-right: 5px;
 }
 
 #low i{
 	color: rgba(255, 255, 33, 0.5);
+	margin-right: 5px;
 }
 
 .context-menu_value{
@@ -296,5 +299,7 @@ menu {
 
 .time{
 	font-size: 10px;
+	color: rgba(122, 118, 118, 1.0);
+	text-align:right;
 }
 

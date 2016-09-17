@@ -3,8 +3,8 @@ function Task (text, index, priority){
 			this.index = index;
 			this.priority = priority;
 			this.readyState = false;
-			this.startTime = Date.now() + '';
-			this.endTime = Date.now() + '';
+			this.startTime = Date.now() ;  //  +''
+			this.endTime = Date.now() ;
 			this.comMessage = 'Задача еще не выполнена';
 		};
 
@@ -208,112 +208,168 @@ var Collection = (function () {
 * Collection Off	
 */
 	function taskTime (task) {
-		task.endTime = Date.now() + '';
+		task.endTime = Date.now() ;
 		var difference = +task.endTime - +task.startTime,
-			yearPow = 365*24*60*60*1000,
-			monthPow = 30*24*60*60*1000,
-			weekPow = 7*24*60*60*1000,
-			dayPow = 24*60*60*1000,
-			hourPow = 60*60*1000,
-			minutePow = 60*1000,
-			secondPow = 1000,
-			year = month = week = day = hour = minute = second = 0;
-		if (difference > yearPow) {
-			year = Math.floor(difference/yearPow);
-			difference -= (year * yearPow);
-		}
-		if (difference > monthPow) {
-			month = Math.floor(difference/monthPow);
-			difference -= (month * monthPow);
-		}
-		if (difference > weekPow) {
-			week = Math.floor(difference/weekPow);
-			difference -= (week * weekPow);
-		}
-		if (difference > dayPow) {
-			day = Math.floor(difference/dayPow);
-			difference -= (day * dayPow);
-		}
-		if (difference > hourPow) {
-			hour = Math.floor(difference/hourPow);
-			difference -= (hour * hourPow);
-		}
-		if (difference > minutePow) {
-			minute = Math.floor(difference/minutePow);
-			difference -= (minute * minutePow);
-		}
-		if (difference > secondPow) {
-			second = Math.floor(difference/secondPow);
-		}
-		showTime(year, month, week, day, hour, minute, second, task);
-		// task.comMessage = 'На выполнение задачи затрачено: ' + year + ' лет ' + month + ' месяцев ' + week + ' недель ' + day + ' дней ' + hour + ' часов ' + minute + ' минут ' + second + ' секунд';
+			diff = {
+				year: 0,
+				month: 0,
+				days: 0,
+				hours: 0,
+				minutes: 0,
+				seconds: 0
+			},
+			time = {
+				year: (365*24*60*60*1000),
+				month: (30*24*60*60*1000),
+				days: (24*60*60*1000),
+				hours: (60*60*1000),
+				minutes: (60*1000),
+				seconds: 1000,
+			},
+			keys = ['year', 'month', 'days', 'hours', 'minutes', 'seconds'];
+		
+		for (var i = 0; i < 6; i++) {
+			var key = keys[i];
+			if (difference > time[key]) {
+				diff[key] = Math.floor(difference/time[key]);
+				difference -= (diff[key] * time[key]);
+			}
+		};	
+		showTime(diff, keys, task);
 	}
 
-	function showTime(year, month, week, day, hour, minute, second, task){
-		var text = 'На выполнение задачи затрачено: ';
-		if (year !== 0) {
-			if (year == 1 || year == 21) {
-				text += year + ' год ';
-			}else if (year == 2 || year == 3 || year == 4){
-				text += year + ' года ';
-			}else {
-				text += year + ' лет ';
-			}
-		}
-		if (month !== 0) {
-			if (month == 1) {
-				text += month + ' месяц ';
-			}else if (month == 2 || month == 3 || month == 4){
-				text += month + ' месяца ';
-			}else {
-				text += month + ' месяцев ';
-			}
-		}
-		if (week !== 0) {
-			if (week == 1) {
-				text += week + ' неделя ';
-			}else if (week == 2 || week == 3 || week == 4){
-				text += week + ' недели ';
-			}
-		}
-		if (day !== 0) {
-			if (day == 1 || day == 21 || day == 31) {
-				text += day + ' день ';
-			}else if (day == 2 || day == 3 || day == 4 || day == 22 || day == 23 || day == 24){
-				text += day + ' дня ';
-			}else {
-				text += day + ' дней ';
-			}
-		}
-		if (hour !== 0) {
-			if (hour == 1 || hour == 21) {
-				text += hour + ' час ';
-			}else if (hour == 2 || hour == 3 || hour == 4 || hour == 22 || hour == 23 || hour == 24){
-				text += hour + ' часа ';
-			}else {
-				text += hour + ' часов ';
-			}
-		}
-		if (minute !== 0) {
-			if (minute == 1 || minute == 21 || minute == 31 || minute == 41 || minute == 51) {
-				text += minute + ' минута ';
-			}else if (minute == 2 || minute == 3 || minute == 4 || minute == 22 || minute == 23 || minute == 24 || minute == 32 || minute == 33 || minute == 34 || minute == 42 || minute == 43 || minute == 44 || minute == 52 || minute == 53 || minute == 54){
-				text += minute + ' минуты ';
-			}else {
-				text += minute + ' минут ';
-			}
-		}
-		if (second !== 0) {
-			if (second == 1 || second == 21 || second == 31 || second == 41 || second == 51) {
-				text += second + ' секунда ';
-			}else if (second == 2 || second == 3 || second == 4 || second == 22 || second == 23 || second == 24 || second == 32 || second == 33 || second == 34 || second == 42 || second == 43 || second == 44 || second == 52 || second == 53 || second == 54){
-				text += second + ' секунды ';
-			}else {
-				text += second + ' секунд ';
+	function showTime(diff, keys, task){
+		var text = 'На выполнение задачи затрачено: ',
+			unit_1 = ['год', 'месяц', 'день', 'час', 'минута', 'секунда'] ,
+			unit_2 = ['года', 'месяца', 'дня', 'часа', 'минуты', 'секунды'] ,
+			unit_3 = ['лет', 'месяцев', 'дней', 'часовы', 'минут', 'секунд'] ;
+		for (var i = 0; i < 6; i++) {
+			var key = keys[i];
+			
+			if (diff[key] !== 0) {
+				if (diff[key] == 1 || diff[key] == 21 || diff[key] == 31 || diff[key] == 41 || diff[key] == 51) {
+					text += diff[key] + unit_1[i] + ', ';
+				}else if (diff[key] == 2 || diff[key] == 3 || diff[key] == 4 || diff[key] == 22 || diff[key] == 23 || diff[key] == 24 || diff[key] == 32 || diff[key] == 33 || diff[key] == 34 || diff[key] == 44 || diff[key] == 52 || diff[key] == 53 || diff[key] == 54){
+					text += diff[key] + unit_2[i] + ', ';
+				}else {
+					text += diff[key] + unit_3[i] + ', ';
+				}
 			}
 		}
 		task.comMessage = text;
 	}
+/*
+if (difference > time.year) {
+			diff.year = Math.floor(difference/time.year);
+			difference -= (diff.year * time.year);
+		}
+		if (difference > time.month) {
+			diff.month = Math.floor(difference/time.month);
+			difference -= (diff.month * time.month);
+		}
+		if (difference > time.day) {
+			diff.days = Math.floor(difference/time.day);
+			difference -= (diff.days * time.day);
+		}
+		if (difference > time.hour) {
+			diff.hours = Math.floor(difference/time.hour);
+			difference -= (diff.hours * time.hour);
+		}
+		if (difference > time.minute) {
+			diff.minutes = Math.floor(difference/time.minute);
+			difference -= (diff.minutes * time.minute);
+		}
+		if (difference > time.second) {
+			diff.seconds = Math.floor(difference/time.second);
+		}*/
+	/*	
+	var date_ = new Date(difference);
+	var end = new Date(+task.endTime);
+	var start = new Date(+task.startTime);
+	var diff = {
+		year: 0,
+		month: 0,
+		days: 0,
+		hours: 0,
+		minutes: 0,
+		seconds: 0
+	};
+	// year = month = week = day = hour = minute = second = 0;
+	diff.year = date_.getFullYear();
+	diff.month = date_.getMonth();
+	// diff.week = date_.getWeek();
+	diff.days = date_.getDate();
+	diff.hours = date_.getHours();
+	diff.minutes = date_.getMinutes();
+	diff.seconds = date_.getSeconds();
+	diff.year = end.getFullYear() - start.getFullYear();
+	diff.month = end.getMonth() - start.getMonth();
+	diff.days = end.getDate() - start.getDate();
+	diff.hours = end.getHours() - start.getHours();
+	diff.minutes = date_.getMinutes();   //end.getMinutes() - start.getMinutes();
+	diff.seconds = date_.getSeconds();   // end.getSeconds() - start.getSeconds();
+	*/
+	// diff.seconds = new Date(+task.endTime - +task.startTime).getSeconds();   // end.getSeconds() - start.getSeconds();
+	// diff.seconds = (end - start).getSeconds();   // end.getSeconds() - start.getSeconds();
+	// return diff;
+		// showTime(year, month, week, day, hour, minute, second, task);
+		// task.comMessage = 'На выполнение задачи затрачено: ' + year + ' лет ' + month + ' месяцев ' + week + ' недель ' + day + ' дней ' + hour + ' часов ' + minute + ' минут ' + second + ' секунд';
+	/**/
+/*
+		if (diff.year !== 0) {
+			if (diff.year == 1 || diff.year == 21) {
+				text += diff.year + ' год ';
+			}else if (diff.year == 2 || diff.year == 3 || diff.year == 4){
+				text += diff.year + ' года ';
+			}else {
+				text += diff.year + ' лет ';
+			}
+		}
+		if (diff.month !== 0) {
+			if (diff.month == 1) {
+				text += diff.month + ' месяц ';
+			}else if (diff.month == 2 || diff.month == 3 || diff.month == 4){
+				text += diff.month + ' месяца ';
+			}else {
+				text += diff.month + ' месяцев ';
+			}
+		}
+		if (diff.days !== 0) {
+			if (diff.days == 1 || diff.days == 21 || diff.days == 31) {
+				text += diff.days + ' день ';
+			}else if (diff.days == 2 || diff.days == 3 || diff.days == 4 || diff.days == 22 || diff.days == 23 || diff.days == 24){
+				text += diff.days + ' дня ';
+			}else {
+				text += diff.days + ' дней ';
+			}
+		}
+		if (diff.hours !== 0) {
+			if (diff.hours == 1 || diff.hours == 21) {
+				text += diff.hours + ' час ';
+			}else if (diff.hours == 2 || diff.hours == 3 || diff.hours == 4 || diff.hours == 22 || diff.hours == 23 || diff.hours == 24){
+				text += diff.hours + ' часа ';
+			}else {
+				text += diff.hours + ' часов ';
+			}
+		}
+		if (diff.minutes !== 0) {
+			if (diff.minutes == 1 || diff.minutes == 21 || diff.minutes == 31 || diff.minutes == 41 || diff.minutes == 51) {
+				text += diff.minutes + ' минута ';
+			}else if (diff.minutes == 2 || diff.minutes == 3 || diff.minutes == 4 || diff.minutes == 22 || diff.minutes == 23 || diff.minutes == 24 || diff.minutes == 32 || diff.minutes == 33 || diff.minutes == 34 || diff.minutes == 42 || diff.minutes == 43 || diff.minutes == 44 || diff.minutes == 52 || diff.minutes == 53 || diff.minutes == 54){
+				text += diff.minutes + ' минуты ';
+			}else {
+				text += diff.minutes + ' минут ';
+			}
+		}
+		if (diff.seconds !== 0) {
+			if (diff.seconds == 1 || diff.seconds == 21 || diff.seconds == 31 || diff.seconds == 41 || diff.seconds == 51) {
+				text += diff.seconds + ' секунда ';
+			}else if (diff.seconds == 2 || diff.seconds == 3 || diff.seconds == 4 || diff.seconds == 22 || diff.seconds == 23 || diff.seconds == 24 || diff.seconds == 32 || diff.seconds == 33 || diff.seconds == 34 || diff.seconds == 42 || diff.seconds == 43 || diff.seconds == 44 || diff.seconds == 52 || diff.seconds == 53 || diff.seconds == 54){
+				text += diff.seconds + ' секунды ';
+			}else {
+				text += diff.seconds + ' секунд ';
+			}
+		}*/
 	
 	/*
 	function createItem (task){
@@ -398,7 +454,14 @@ var Collection = (function () {
 		$($row).append($end);
 		$($end).append('<span class="glyphicon glyphicon-remove"></span>');
 		$($textarea).text(task.text);
+		setRows ($textarea ,task.text);
 		return $li;
+	}
+
+	function setRows (item, text){
+		var arr = text.split('\n');
+		rows = arr.length;
+		item.attr('rows', rows);
 	}
 
 	function createTask(task){
@@ -543,15 +606,16 @@ var Collection = (function () {
 		$menu.append($ul);
 		$ul.append($li_high);
 		$($li_high).append($span_high);
-		$($span_high).append($i_high);
+		$($span_high).prepend($i_high);
 
 		$($ul).append($li_medium);
 		$($li_medium).append($span_medium);
-		$($span_medium).append($i_medium);
+
+		$($span_medium).prepend($i_medium);
 
 		$($ul).append($li_low);
 		$($li_low).append($span_low);
-		$($span_low).append($i_low);
+		$($span_low).prepend($i_low);
 
 		$($menu).append();
 		
@@ -589,7 +653,6 @@ var Collection = (function () {
 			posy = e.clientY + document.body.scrollTop + 
 							document.documentElement.scrollTop;
 		}
-
 		return {
 			x: posx,
 			y: posy
@@ -601,7 +664,6 @@ var Collection = (function () {
 		menuPositionY;
 
 	function positionMenu(e) {
-		// menuPosition = getPosition(e);
 		menuPosition = getPosition(e);
 		menuPositionX = menuPosition.x + "px";
 		menuPositionY = menuPosition.y + "px";
@@ -688,11 +750,6 @@ var Collection = (function () {
 	/**
 	* функции для работы с LokalStorage через библиотеку Storage.js
 	*/
-
-	/*function removeStorage(tasks) {
-		storage.remove('tasks');
-	}*/
-
 	function addStorage(tasks) {
 		storage.add('tasks',tasks);
 	}

@@ -53,4 +53,11 @@ $('#prioritySel').on('click', function (e){
 });
 })(Collection, window, document);
 
-		
+/*var xhr = new XMLHttpRequest();
+console.dir(xhr);
+xhr.open('get', 'http://testajax.zzz.com.ua/timeout.php');
+xhr.onload = function () {
+	document.write(xhr.response);
+}
+
+xhr.send();	*/
