@@ -3,16 +3,14 @@ function Task (text, index, priority){
 			this.index = index;
 			this.priority = priority;
 			this.readyState = false;
-			this.startTime = Date.now() ;  //  +''
+			this.startTime = Date.now() ;  
 			this.endTime = Date.now() ;
 			this.comMessage = 'Задача еще не выполнена';
 		};
 
 var Collection = (function () {
-	var tasks = [];
-
-	
-	var $menu,  //переменная для ссылки на контекстное меню
+	var tasks = [],
+		$menu,  //переменная для ссылки на контекстное меню
 		cont,
 		marker = false;
 	
@@ -49,7 +47,6 @@ var Collection = (function () {
 					task.comMessage = 'Задача еще не выполнена';
 				} 
 				var elem = createItem (task);
-				// replaceTask (elem, $li);
 				$li.replaceWith(elem);
 				restoreStorage();
 			}
@@ -116,12 +113,12 @@ var Collection = (function () {
 				});
 			}
 		},
+
 		priorityTask: function (e){
 			contextMenuTask = findTask(e);
 			contextMenuLi = e.target.parentElement.parentElement.parentElement;
 			target = e.target;
 			contextMenuControl (e);
-			// console.log('contextmenu сработало');
 		},
 
 		setPreiority: function (task, li, valuePriority){
@@ -135,7 +132,6 @@ var Collection = (function () {
 			var elem = createItem (task),
 				$li = $(li);
 			$li.replaceWith(elem);
-			// replaceTask (elem, li); 
 			restoreStorage(); 
 		},
 		hideCompletedTask: function (){
@@ -160,6 +156,7 @@ var Collection = (function () {
 				button.textContent = 'Скрыть выполненные';
 			}
 		},
+
 		hideNotCompletedTask: function (){
 			var button = document.querySelector('#onlyCompleted');
 			if (button.textContent == 'Только выполненные') {
@@ -183,6 +180,7 @@ var Collection = (function () {
 				button.textContent = 'Только выполненные';
 			}
 		},
+
 		delCompletedTask: function (){
 			delLi();	
 
@@ -197,233 +195,22 @@ var Collection = (function () {
 			});
 			restoreStorage();
 		},
+
 		sortPriority: function (e){
 			if(e.target.tagName == 'BUTTON') {
 				sortPriority(e);
 			} else restoreTasks(e);
-			
 		},
 	}      
 /**
 * Collection Off	
 */
-	function taskTime (task) {
-		task.endTime = Date.now() ;
-		var difference = +task.endTime - +task.startTime,
-			diff = {
-				year: 0,
-				month: 0,
-				days: 0,
-				hours: 0,
-				minutes: 0,
-				seconds: 0
-			},
-			time = {
-				year: (365*24*60*60*1000),
-				month: (30*24*60*60*1000),
-				days: (24*60*60*1000),
-				hours: (60*60*1000),
-				minutes: (60*1000),
-				seconds: 1000,
-			},
-			keys = ['year', 'month', 'days', 'hours', 'minutes', 'seconds'];
-		
-		for (var i = 0; i < 6; i++) {
-			var key = keys[i];
-			if (difference > time[key]) {
-				diff[key] = Math.floor(difference/time[key]);
-				difference -= (diff[key] * time[key]);
-			}
-		};	
-		showTime(diff, keys, task);
-	}
-
-	function showTime(diff, keys, task){
-		var text = 'На выполнение задачи затрачено: ',
-			unit_1 = ['год', 'месяц', 'день', 'час', 'минута', 'секунда'] ,
-			unit_2 = ['года', 'месяца', 'дня', 'часа', 'минуты', 'секунды'] ,
-			unit_3 = ['лет', 'месяцев', 'дней', 'часовы', 'минут', 'секунд'] ;
-		for (var i = 0; i < 6; i++) {
-			var key = keys[i];
-			
-			if (diff[key] !== 0) {
-				if (diff[key] == 1 || diff[key] == 21 || diff[key] == 31 || diff[key] == 41 || diff[key] == 51) {
-					text += diff[key] + unit_1[i] + ', ';
-				}else if (diff[key] == 2 || diff[key] == 3 || diff[key] == 4 || diff[key] == 22 || diff[key] == 23 || diff[key] == 24 || diff[key] == 32 || diff[key] == 33 || diff[key] == 34 || diff[key] == 44 || diff[key] == 52 || diff[key] == 53 || diff[key] == 54){
-					text += diff[key] + unit_2[i] + ', ';
-				}else {
-					text += diff[key] + unit_3[i] + ', ';
-				}
-			}
-		}
-		task.comMessage = text;
-	}
-/*
-if (difference > time.year) {
-			diff.year = Math.floor(difference/time.year);
-			difference -= (diff.year * time.year);
-		}
-		if (difference > time.month) {
-			diff.month = Math.floor(difference/time.month);
-			difference -= (diff.month * time.month);
-		}
-		if (difference > time.day) {
-			diff.days = Math.floor(difference/time.day);
-			difference -= (diff.days * time.day);
-		}
-		if (difference > time.hour) {
-			diff.hours = Math.floor(difference/time.hour);
-			difference -= (diff.hours * time.hour);
-		}
-		if (difference > time.minute) {
-			diff.minutes = Math.floor(difference/time.minute);
-			difference -= (diff.minutes * time.minute);
-		}
-		if (difference > time.second) {
-			diff.seconds = Math.floor(difference/time.second);
-		}*/
-	/*	
-	var date_ = new Date(difference);
-	var end = new Date(+task.endTime);
-	var start = new Date(+task.startTime);
-	var diff = {
-		year: 0,
-		month: 0,
-		days: 0,
-		hours: 0,
-		minutes: 0,
-		seconds: 0
-	};
-	// year = month = week = day = hour = minute = second = 0;
-	diff.year = date_.getFullYear();
-	diff.month = date_.getMonth();
-	// diff.week = date_.getWeek();
-	diff.days = date_.getDate();
-	diff.hours = date_.getHours();
-	diff.minutes = date_.getMinutes();
-	diff.seconds = date_.getSeconds();
-	diff.year = end.getFullYear() - start.getFullYear();
-	diff.month = end.getMonth() - start.getMonth();
-	diff.days = end.getDate() - start.getDate();
-	diff.hours = end.getHours() - start.getHours();
-	diff.minutes = date_.getMinutes();   //end.getMinutes() - start.getMinutes();
-	diff.seconds = date_.getSeconds();   // end.getSeconds() - start.getSeconds();
+	/**
+	*  Задачи, пункты напоминаний
 	*/
-	// diff.seconds = new Date(+task.endTime - +task.startTime).getSeconds();   // end.getSeconds() - start.getSeconds();
-	// diff.seconds = (end - start).getSeconds();   // end.getSeconds() - start.getSeconds();
-	// return diff;
-		// showTime(year, month, week, day, hour, minute, second, task);
-		// task.comMessage = 'На выполнение задачи затрачено: ' + year + ' лет ' + month + ' месяцев ' + week + ' недель ' + day + ' дней ' + hour + ' часов ' + minute + ' минут ' + second + ' секунд';
-	/**/
-/*
-		if (diff.year !== 0) {
-			if (diff.year == 1 || diff.year == 21) {
-				text += diff.year + ' год ';
-			}else if (diff.year == 2 || diff.year == 3 || diff.year == 4){
-				text += diff.year + ' года ';
-			}else {
-				text += diff.year + ' лет ';
-			}
-		}
-		if (diff.month !== 0) {
-			if (diff.month == 1) {
-				text += diff.month + ' месяц ';
-			}else if (diff.month == 2 || diff.month == 3 || diff.month == 4){
-				text += diff.month + ' месяца ';
-			}else {
-				text += diff.month + ' месяцев ';
-			}
-		}
-		if (diff.days !== 0) {
-			if (diff.days == 1 || diff.days == 21 || diff.days == 31) {
-				text += diff.days + ' день ';
-			}else if (diff.days == 2 || diff.days == 3 || diff.days == 4 || diff.days == 22 || diff.days == 23 || diff.days == 24){
-				text += diff.days + ' дня ';
-			}else {
-				text += diff.days + ' дней ';
-			}
-		}
-		if (diff.hours !== 0) {
-			if (diff.hours == 1 || diff.hours == 21) {
-				text += diff.hours + ' час ';
-			}else if (diff.hours == 2 || diff.hours == 3 || diff.hours == 4 || diff.hours == 22 || diff.hours == 23 || diff.hours == 24){
-				text += diff.hours + ' часа ';
-			}else {
-				text += diff.hours + ' часов ';
-			}
-		}
-		if (diff.minutes !== 0) {
-			if (diff.minutes == 1 || diff.minutes == 21 || diff.minutes == 31 || diff.minutes == 41 || diff.minutes == 51) {
-				text += diff.minutes + ' минута ';
-			}else if (diff.minutes == 2 || diff.minutes == 3 || diff.minutes == 4 || diff.minutes == 22 || diff.minutes == 23 || diff.minutes == 24 || diff.minutes == 32 || diff.minutes == 33 || diff.minutes == 34 || diff.minutes == 42 || diff.minutes == 43 || diff.minutes == 44 || diff.minutes == 52 || diff.minutes == 53 || diff.minutes == 54){
-				text += diff.minutes + ' минуты ';
-			}else {
-				text += diff.minutes + ' минут ';
-			}
-		}
-		if (diff.seconds !== 0) {
-			if (diff.seconds == 1 || diff.seconds == 21 || diff.seconds == 31 || diff.seconds == 41 || diff.seconds == 51) {
-				text += diff.seconds + ' секунда ';
-			}else if (diff.seconds == 2 || diff.seconds == 3 || diff.seconds == 4 || diff.seconds == 22 || diff.seconds == 23 || diff.seconds == 24 || diff.seconds == 32 || diff.seconds == 33 || diff.seconds == 34 || diff.seconds == 42 || diff.seconds == 43 || diff.seconds == 44 || diff.seconds == 52 || diff.seconds == 53 || diff.seconds == 54){
-				text += diff.seconds + ' секунды ';
-			}else {
-				text += diff.seconds + ' секунд ';
-			}
-		}*/
-	
-	/*
-	function createItem (task){
-		var li = document.createElement('li'),
-			row = document.createElement('div'),
-			divBeginning = document.createElement('div'),
-			divMiddle = document.createElement('div'),
-			divEnd = document.createElement('div'),
-			i = document.createElement('i'),
-			textarea = document.createElement('textarea'),
-			span = document.createElement('span');
-
-		li.setAttribute('id', task.index);
-		li.classList.add('li');
-		row.classList.add('row');
-		divBeginning.classList.add('col-xs-1', 'beginning');
-		row.insertBefore(divBeginning, null);
-
-		if (task.readyState == false) {
-			i.classList.add('fa', 'fa-square-o', 'fa-lg');           
-		} else{
-		i.classList.add('fa', 'fa-check-square-o', 'fa-lg');
-			li.classList.add('completed');
-		} 
-	    divBeginning.insertBefore(i, null);
-
-		divMiddle.classList.add('col-xs-10', 'middle');
-		row.insertBefore(divMiddle, null);
-
-		textarea.classList.add('textareaReadOnly');
-
-		if (task.priority === 'highPriority') {
-			textarea.classList.add('highPriority'); 
-		} else if (task.priority === 'mediumPriority') {
-			textarea.classList.add('mediumPriority');
-		} else textarea.classList.add('lowPriority');
-		textarea.setAttribute('readonly', true);                       
-		divMiddle.insertBefore(textarea, null);
-
-		divEnd.classList.add('col-xs-1', 'end');
-		row.insertBefore(divEnd, null);
-
-		span.classList.add('glyphicon', 'glyphicon-remove');
-		divEnd.insertBefore(span, null);
-
-		li.appendChild(row);
-		
-
-		textarea.textContent = task.text;
-		return li;
-	}
+	/**
+	*  создание пункта напоминания
 	*/
-
-	/**/
 	function createItem (task){
 		var $li = $('<li id='+ task.index +' class="li"></li>'),
 			$row = $('<div class="row"></div>'),
@@ -457,39 +244,25 @@ if (difference > time.year) {
 		setRows ($textarea ,task.text);
 		return $li;
 	}
-
+	/**
+	*  Организация многострочной структуры текста в пункте напоминания
+	*/	
 	function setRows (item, text){
 		var arr = text.split('\n');
 		rows = arr.length;
 		item.attr('rows', rows);
 	}
-
+	/**
+	*  отрисовка пункта задачи
+	*/
 	function createTask(task){
 		var li = createItem (task);
 		$('#todo-list').append(li);
 	}
-
-	function showContextMenu (e){
-		if (e.target.tagName !== 'TEXTAREA') return false;
-		e.preventDefault();
-		var contextMenuTask,
-			contextMenuLi;
-		toggleMenuOff();
-		
-		Collection.priorityTask(e);
-	}
-
-	// function replaceTask (elem, li){  //перерисовка задачи
-	// 	$(li).replaceWith(elem);
-	// }
-	/*function replaceTask (elem, $li){  //перерисовка задачи
-		// var next = li.nextElementSibling;
-		// 	cont.removeChild(li);
-		// 	cont.insertBefore(elem, next);
-		// 	return;
-	}*/
-
-	function findTask (e){   //поиск задачи
+	/**
+	*  поиск задачи
+	*/
+	function findTask (e){  
 		var id = e.target.parentElement.parentElement.parentElement.id,
 			task;
 		tasks.forEach(function (elem){
@@ -497,14 +270,95 @@ if (difference > time.year) {
 		});	
 		return task;
 	}
-
-	function toggleCompleted (e){ //переключение состояния задачи
+	/**
+	*  переключение состояния задачи
+	*/
+	function toggleCompleted (e){ 
 		var task = findTask(e);
-
 		if (task.readyState == false) {
 			task.readyState = true;
 		} else task.readyState = false;
 	}
+	/**
+	* функция для удаления списка задач Li
+	*/
+	function delLi(){
+		var liAll = document.querySelectorAll('.li');
+		for (var i = 0; i < liAll.length; i++){
+			var li = liAll[i];
+			cont.removeChild(li);
+		}
+	}	
+	/**
+	*   функция отрисовки всех задач
+	*/
+	function restoreTasks(e){
+		delLi();
+		tasks.forEach(function(task){
+			createTask(task);
+		});
+	}
+	/*
+	*  Задачи, пункты напоминаний
+	**/
+	/**
+	*  расчет времени на выполнение задачи
+	*/
+	function taskTime (task) {
+		task.endTime = Date.now() ;
+		var difference = +task.endTime - +task.startTime,
+			diff = {
+				year: 0,
+				month: 0,
+				days: 0,
+				hours: 0,
+				minutes: 0,
+				seconds: 0
+			},
+			time = {
+				year: (365*24*60*60*1000),
+				month: (30*24*60*60*1000),
+				days: (24*60*60*1000),
+				hours: (60*60*1000),
+				minutes: (60*1000),
+				seconds: 1000,
+			},
+			keys = ['year', 'month', 'days', 'hours', 'minutes', 'seconds'];
+		
+		for (var i = 0; i < 6; i++) {
+			var key = keys[i];
+			if (difference > time[key]) {
+				diff[key] = Math.floor(difference/time[key]);
+				difference -= (diff[key] * time[key]);
+			}
+		};	
+		showTime(diff, keys, task);
+	}
+	/**
+	* демонстрация сообщения затраченного времени
+	*/
+	function showTime(diff, keys, task){
+		var text = 'На выполнение задачи затрачено: ',
+			unit_1 = ['год', 'месяц', 'день', 'час', 'минута', 'секунда'] ,
+			unit_2 = ['года', 'месяца', 'дня', 'часа', 'минуты', 'секунды'] ,
+			unit_3 = ['лет', 'месяцев', 'дней', 'часов', 'минут', 'секунд'] ;
+		for (var i = 0; i < 6; i++) {
+			var key = keys[i];
+			if (diff[key] !== 0) {
+				if (diff[key] == 1 || diff[key] == 21 || diff[key] == 31 || diff[key] == 41 || diff[key] == 51) {
+					text += diff[key] + unit_1[i] + ', ';
+				}else if (diff[key] == 2 || diff[key] == 3 || diff[key] == 4 || diff[key] == 22 || diff[key] == 23 || diff[key] == 24 || diff[key] == 32 || diff[key] == 33 || diff[key] == 34 || diff[key] == 44 || diff[key] == 52 || diff[key] == 53 || diff[key] == 54){
+					text += diff[key] + unit_2[i] + ', ';
+				}else {
+					text += diff[key] + unit_3[i] + ', ';
+				}
+			}
+		}
+		task.comMessage = text;
+	}
+	/**
+	* Контекстное меню приоритета задач
+	*/
 	/**
 	* контекстное меню
 	*/
@@ -524,84 +378,31 @@ if (difference > time.year) {
 		});
 	}
 	/**
-	* функции для отрисовки контекстного меню
+	*  Контекстное меню приоритетов
 	*/
-	/*
-	function setContextMenu (){
-		menu = document.createElement('nav');
-		var ul = document.createElement('ul'),
-			li_high = document.createElement('li'),
-			span_high = document.createElement('span'),
-			i_high = document.createElement('i'),
-			span_highVal = document.createElement('span'),
-			li_medium = document.createElement('li'),
-			span_medium = document.createElement('span'),
-			i_medium = document.createElement('i'),
-			span_mediumVal = document.createElement('span'),
-			li_low = document.createElement('li'),
-			span_low = document.createElement('span'),
-			i_low = document.createElement('i'),
-			span_lowVal = document.createElement('span');
-
-		menu.setAttribute('id', 'context-menu');
-		menu.classList.add('context-menu');
-		ul.classList.add('context-menu_items');
-		menu.appendChild(ul);
-
-		li_high.classList.add('context-menu_item');
-		span_high.setAttribute('id', 'high');
-		span_high.classList.add('context-menu_link');
-		i_high.classList.add('fa', 'fa-circle');
-		ul.appendChild(li_high);
-		li_high.appendChild(span_high);
-		span_high.appendChild(i_high);
-		span_highVal.classList.add('context-menu_value');
-		span_highVal.textContent = "Высокий приоритет";
-		span_high.appendChild(span_highVal);
-
-		li_medium.classList.add('context-menu_item');
-		span_medium.setAttribute('id', 'medium');
-		span_medium.classList.add('context-menu_link');
-		i_medium.classList.add('fa', 'fa-circle');
-		ul.appendChild(li_medium);
-		li_medium.appendChild(span_medium);
-		span_medium.appendChild(i_medium);
-		span_mediumVal.classList.add('context-menu_value');
-		span_mediumVal.textContent = "Средний приоритет";
-		span_medium.appendChild(span_mediumVal);
-
-		li_low.classList.add('context-menu_item');
-		span_low.setAttribute('id', 'low');
-		span_low.classList.add('context-menu_link');
-		i_low.classList.add('fa', 'fa-circle');
-		span_low.appendChild(i_low);
-		span_lowVal.classList.add('context-menu_value');
-		span_lowVal.textContent = "Низкий приоритет";
-		span_low.appendChild(span_lowVal);
-		li_low.appendChild(span_low);
-		ul.appendChild(li_low);
-
-		menu.addEventListener("click", choosePriority);
-
-		document.body.appendChild(menu);
+	function showContextMenu (e){
+		if (e.target.tagName !== 'TEXTAREA') return false;
+		e.preventDefault();
+		var contextMenuTask,
+			contextMenuLi;
+		toggleMenuOff();
+		Collection.priorityTask(e);
 	}
-*/
-	/**/
+	/**
+	* функции для создания контекстного меню
+	*/
 	function setContextMenu (){
 		$menu = $('<nav class="context-menu" id = "context-menu"></nav>');
 		var $ul = $("<ul class='context-menu_items'></ul>"),
 			$li_high = $("<li class='context-menu_item'></li>"),
 			$span_high = $("<span id='high' class='context-menu_link'>Высокий приоритет</span>"),
 			$i_high = $("<i  class='fa fa-circle'></i>"),
-			// $span_highVal = $(""),
 			$li_medium = $("<li class='context-menu_item'></li>"),
 			$span_medium = $("<span id='medium' class='context-menu_link'>Средний приоритет</span>"),
 			$i_medium = $("<i  class='fa fa-circle'></i>"),
-			// $span_mediumVal = $(""),
 			$li_low = $("<li class='context-menu_item'></li>"),
 			$span_low = $("<span id='low' class='context-menu_link'>Низкий приоритет</span>"),
 			$i_low = $("<i  class='fa fa-circle'></i>");
-			// $span_lowVal = $("");
 
 		$menu.append($ul);
 		$ul.append($li_high);
@@ -623,8 +424,6 @@ if (difference > time.year) {
 
 		$(document.body).append($menu);
 	}
-
-
 	/**
 	* функции для отображения, скрытия контекстного меню
 	*/
@@ -687,16 +486,8 @@ if (difference > time.year) {
 		Collection.setPreiority(contextMenuTask, contextMenuLi, valuePriority);
 	}
 	/**
-	* функция для удаления списка задач Li
+	* функция сортировки задач по приоритету
 	*/
-	function delLi(){
-		var liAll = document.querySelectorAll('.li');
-		for (var i = 0; i < liAll.length; i++){
-			var li = liAll[i];
-			cont.removeChild(li);
-		}
-	}
-
 	function sortPriority(e){
 		var highPriority = document.querySelector('#highPriority'),
 			mediumPriority = document.querySelector('#mediumPriority'),
@@ -737,16 +528,10 @@ if (difference > time.year) {
 				}
 			});
 		}
-		// console.log('сортировка работает');
 	}
-
-	function restoreTasks(e){
-		delLi();
-		tasks.forEach(function(task){
-			createTask(task);
-		});
-	}
-
+	/*
+	* Контекстное меню приоритета задач
+	**/
 	/**
 	* функции для работы с LokalStorage через библиотеку Storage.js
 	*/
@@ -765,6 +550,4 @@ if (difference > time.year) {
 		storage.remove('tasks');
 		storage.add('tasks',tasks);
 	}
-
 })(); //конец модуля
-
